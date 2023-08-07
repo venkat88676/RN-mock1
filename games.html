@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <nav>
+        <a href="./index.html">Home</a>
+        <a href="./games.html">Games</a>
+        <input type="search" id="searchName">
+    </nav>
+    <label >Starting date</label>
+    <input type="date" placeholder="Starting Date">
+    <label >Ending date</label>
+    <input type="date" placeholder="Ending Date">
+    <div id="games-container">
+
+    </div>
+
+</body>
+</html>
+
+<script>
+    let gamesContainer=document.getElementById("games-container");
+
+    function getData(){
+        fetch(`https://www.balldontlie.io/api/v1/games`)
+        .then((res)=>res.json())
+        .then((data)=>{
+            console.log(data.data)
+            
+            displayData(data.data)
+        })
+        .catch((err)=>console.log(err))
+    }
+    getData()
+
+</script>

@@ -1,0 +1,25 @@
+#container{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+}
+
+#cart{
+    border: solid  0.2px rgba(78, 75, 75, 0.778);
+    text-align: center;
+    margin: 5px;
+    padding: 10px;
+}
+nav{
+    background-color: antiquewhite;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+#team_details{
+    display: none;
+
+    background-color: rgb(159, 196, 228);
+}
+#team_details.active{
+    display: block;
+}
