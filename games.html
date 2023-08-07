@@ -13,10 +13,29 @@
         <input type="search" id="searchName">
     </nav>
     <label >Starting date</label>
-    <input type="date" placeholder="Starting Date">
+    <input type="date" id="startDate" placeholder="Starting Date">
     <label >Ending date</label>
-    <input type="date" placeholder="Ending Date">
+    <input type="date"  id="endDate" placeholder="Ending Date">
+    <button id="searchDate">Search</button>
+
+    <select name="" id="season">
+        <option value="">Select Season</option>
+        <option value="2010">Season 2010</option>
+        <option value="2011">Season 2011</option>
+        <option value="2012">Season 2012</option>
+        <option value="2013">Season 2013</option>
+        <option value="2014">Season 2014</option>
+        <option value="2015">Season 2015</option>
+        <option value="2016">Season 2016</option>
+        <option value="2017">Season 2017</option>
+        <option value="2018">Season 2018</option>
+        <option value="2019">Season 2019</option>
+        <option value="2020">Season 2020</option>       
+
+    </select>
     <div id="games-container">
+
+
 
     </div>
 
@@ -25,17 +44,68 @@
 
 <script>
     let gamesContainer=document.getElementById("games-container");
+    let startDate=document.getElementById("startDate");
+    let endDate=document.getElementById("endDate")
+    let searchDate=document.getElementById("searchDate");
+    searchDate.addEventListener(("click"),()=>{
+        let dateFilter = apiData.filter((el) => {
+        const elDate = new Date(el.date);
+        const startDateValue = new Date(startDate.value);
+        const endDateValue = new Date(endDate.value);
+        
+        return elDate >= startDateValue && elDate <= endDateValue;
+        });
 
-    function getData(){
+        console.log(dateFilter);
+        displayData(dateFilter)
+    })
+
+    let season=document.getElementById("season")
+    season.addEventListener("change",()=>{
+        console.log(season.value)
+        let filterData=apiData.filter((el)=>el.season==season.value);
+        displayData(filterData)
+    })
+    let apiData=[]
+    function getDatagame(){
         fetch(`https://www.balldontlie.io/api/v1/games`)
         .then((res)=>res.json())
         .then((data)=>{
-            console.log(data.data)
-            
+            console.log(data.data)            
             displayData(data.data)
+            apiData=data.data
         })
         .catch((err)=>console.log(err))
     }
-    getData()
+    getDatagame()
+    function displayData(data){
+        gamesContainer.innerHTML=null;
+        data.forEach(element => {
+            let cart=document.createElement("div")
+            cart.setAttribute("id","cart")
+            let name=document.createElement("p")
+            if(element.home_team_score>element.visitor_team_score){
+                var name1=`${element.home_team.full_name} "WON"`
+                var name2=`${element.visitor_team.full_name} "LOST"`
+            }
+            else{
+                var name1=`${element.home_team.full_name} "LOST"`
+                var name2=`${element.visitor_team.full_name} "WON"`
+            }
+            name.innerText=name1+" VS "+name2;
+            let date=document.createElement("p");
+            date.innerText="Date:- "+element.date
+            let season=document.createElement("p");
+            let homeScore=document.createElement("h4")
+            homeScore.innerText="Home Team Score:- "+element.home_team_score
+            let visitScore=document.createElement("h4")
+            visitScore.innerText="Visitor score:- "+element.visitor_team_score
+            season.innerText="Season "+element.season
+            cart.append(name,date,season,homeScore,visitScore);
+            gamesContainer.append(cart)
+        });
+       
+    }
+    
 
 </script>
